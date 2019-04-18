@@ -9,7 +9,7 @@ void setup() {
   translate(width / 2, height / 2);
   smooth();
   for (int i = 0; i < vertices.length; i++) {
-    vertices[i] = new Vertex(i * 10,0); 
+    vertices[i] = new Vertex(i * 50, i * 5); 
   }
 
 }
@@ -21,11 +21,16 @@ void setup() {
 void draw() {
   //filter( BLUR,1 );
   background(200);
-  for (Vertex v: vertices) {
-    PVector wind = new PVector(2, 3);
-    v.applyForce(wind);
-    v.update();
-    v.display();
+  for (Vertex i: vertices) {
+    for (Vertex j: vertices) {
+      if (i != j) {
+        PVector force = j.attract(i);
+        i.applyForce(force);
+      }
+    }
+    
+    i.update();
+    i.display();
   }
 } 
 

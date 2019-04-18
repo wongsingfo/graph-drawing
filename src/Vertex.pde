@@ -1,5 +1,5 @@
 
-class Vertex {
+public class Vertex {
   private PVector location;
   private PVector accForce = new PVector();
   
@@ -36,5 +36,19 @@ class Vertex {
       location.y = height;
     }
 
+  }
+  
+  public float distance(Vertex a) {
+    return PVector.sub(location, a.location).mag();
+  }
+  
+  public PVector attract(Vertex a) {
+    float dis = max(distance(a), 1.0);
+    float strength = dis / K;
+    
+    PVector force = PVector.sub(location, a.location);
+    force.normalize();
+    force.mult(strength);
+    return force;
   }
 };
