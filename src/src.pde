@@ -29,6 +29,16 @@ void draw() {
   }
 } 
 
+boolean running = true;
+void toggleLoop() {
+  if (running) {
+    noLoop();
+  } else {
+    loop();
+  }
+  running = ! running;
+}
+
 void mousePressed() {
-  //loop();
+  toggleLoop();
 }
