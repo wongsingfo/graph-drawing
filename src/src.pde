@@ -5,7 +5,7 @@ Vertex[] vertices = new Vertex[20];
 // The statements in the setup() function 
 // run once when the program begins
 void setup() {
-  size(800, 200);
+  size(800, 600);
   translate(width / 2, height / 2);
   smooth();
   for (int i = 0; i < vertices.length; i++) {
@@ -24,8 +24,8 @@ void draw() {
   for (Vertex i: vertices) {
     for (Vertex j: vertices) {
       if (i != j) {
-        PVector force = j.attract(i);
-        i.applyForce(force);
+        i.applyForce(j.attract(i));
+        i.applyForce(j.repulse(i));
       }
     }
     

@@ -34,6 +34,8 @@ public class Vertex {
 
     if (location.y > height) {
       location.y = height;
+    } else if (location.y < 0) {
+      location.y = 0;
     }
 
   }
@@ -43,10 +45,20 @@ public class Vertex {
   }
   
   public PVector attract(Vertex a) {
-    float dis = max(distance(a), 1.0);
+    float dis = distance(a);
     float strength = dis / K;
     
     PVector force = PVector.sub(location, a.location);
+    force.normalize();
+    force.mult(strength);
+    return force;
+  }
+  
+  public PVector repulse(Vertex a) {
+    float dis = max(distance(a), 1.0);
+    float strength = C * K * K / max(dis, 1.0);
+    
+    PVector force = PVector.sub(a.location, location);
     force.normalize();
     force.mult(strength);
     return force;
