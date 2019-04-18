@@ -2,7 +2,7 @@ import java.util.*;
 
 
 Random rand = new Random();
-Vertex[] vertices = new Vertex[100];
+Vertex[] vertices = new Vertex[144];
 
 
 // The statements in the setup() function 
