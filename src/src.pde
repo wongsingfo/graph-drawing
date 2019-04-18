@@ -1,5 +1,8 @@
+import java.util.*;
 
-Vertex[] vertices = new Vertex[20];
+
+Random rand = new Random();
+Vertex[] vertices = new Vertex[100];
 
 
 // The statements in the setup() function 
@@ -12,6 +15,10 @@ void setup() {
     vertices[i] = new Vertex(i * 50, i * 5); 
   }
 
+  List<Vertex> l = Arrays.asList(vertices);
+  Collections.shuffle(l);
+  Vertex[] randomVertices = (Vertex[]) l.toArray();
+  case_mesh(randomVertices);
 }
 
 // The statements in draw() are run until the 
@@ -24,12 +31,17 @@ void draw() {
   for (Vertex i: vertices) {
     for (Vertex j: vertices) {
       if (i != j) {
-        i.applyForce(j.attract(i));
         i.applyForce(j.repulse(i));
       }
     }
+    for (Vertex j: i.neighbors) {
+      i.applyForce(j.attract(i));
+    }
     
     i.update();
+  }
+  
+  for (Vertex i: vertices) {
     i.display();
   }
 } 

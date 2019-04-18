@@ -2,6 +2,13 @@
 public class Vertex {
   private PVector location;
   private PVector accForce = new PVector();
+  int id = rand.nextInt();
+  
+  List<Vertex> neighbors = new ArrayList<Vertex>();
+  
+  public void add(Vertex a) {
+    neighbors.add(a);
+  }
   
   public Vertex(float x, float y) {
     location = new PVector(x, y);
@@ -17,11 +24,19 @@ public class Vertex {
     accForce.mult(0);
   }
   
-  public void display() {
+  private void display() {
     stroke(0);
     strokeWeight(2);
     fill(127);
-    ellipse(location.x,location.y,48,48);
+    if (neighbors.isEmpty()) {
+      ellipse(location.x,location.y,24,24);
+    } else {
+      for (Vertex a : neighbors) {
+        if (a.id > id) {
+          line(location.x, location.y, a.location.x, a.location.y);
+        }
+      }
+    }
   }
   
   public void checkEdges() {
