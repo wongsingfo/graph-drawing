@@ -17,7 +17,9 @@ Vertex[] loadGraph(String name, int indexFrom) {
     int m = scanner.nextInt();
     graph = new Vertex[n];
     for (int i = 0; i < n; i++) {
-      graph[i] = new Vertex(rand.nextFloat() * width, rand.nextFloat() * height);
+      float x = rand.nextFloat() + width / 2;
+      float y = rand.nextFloat() + height / 2;
+      graph[i] = new Vertex(x, y);
     }
     for (int _ = 0; _ < m; _++) {
       Vertex u = graph[scanner.nextInt() - indexFrom];
@@ -38,18 +40,40 @@ Vertex[] loadGraph(String name, int indexFrom) {
 // run once when the program begins
 void setup() {
   size(800, 600);
-  translate(width / 2, height / 2);
   smooth();
-  for (int i = 0; i < vertices.length; i++) {
-    vertices[i] = new Vertex(i * 50, i * 5); 
-  }
-  
   vertices = loadGraph("jagmesh1", 1);
 
+  //for (int i = 0; i < vertices.length; i++) {
+  //  vertices[i] = new Vertex(i * 50, i * 5); 
+  //}
   //List<Vertex> l = Arrays.asList(vertices);
   //Collections.shuffle(l);
   //Vertex[] randomVertices = (Vertex[]) l.toArray();
   //case_mesh(randomVertices);
+}
+
+float step = 8.0;
+float step_scale = 0.9;
+float energy0 = Float.POSITIVE_INFINITY;
+int progress = 0;
+
+void updateStep(float energy) {
+  if (energy < energy0) {
+    progress += 1;
+    if (progress >= 5) {
+      progress = 0;
+      step /= step_scale;
+    }
+  } else {
+    progress = 0;
+    step *= step_scale;
+  }
+  
+  if (step < 0.0000003) {
+    toggleLoop();
+  }
+  
+  energy0 = energy;
 }
 
 // The statements in draw() are run until the 
@@ -58,6 +82,8 @@ void setup() {
 // line is run again.
 void draw() {
   //filter( BLUR,1 );
+  float energy = 0;
+  
   background(200);
   for (Vertex i: vertices) {
     for (Vertex j: vertices) {
@@ -69,12 +95,18 @@ void draw() {
       i.applyForce(j.attract(i));
     }
     
+    energy += i.energy();
     i.update();
   }
   
   for (Vertex i: vertices) {
     i.display();
   }
+  
+  updateStep(energy);
+  
+  textSize(32);
+  text(String.format("Energy: %f, step: %f", energy0, step), 10, 30);
 } 
 
 boolean running = true;

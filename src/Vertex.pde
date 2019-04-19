@@ -18,9 +18,14 @@ public class Vertex {
     accForce.add(force).limit(height);
   }
   
+  public float energy() {
+    float norm = accForce.mag();
+    return norm * norm;
+  }
+  
   public void update() {
     location.add(accForce.normalize().mult(step));
-    checkEdges();
+    //checkEdges();
     accForce.mult(0);
   }
   
