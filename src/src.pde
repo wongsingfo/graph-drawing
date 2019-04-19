@@ -41,7 +41,8 @@ Vertex[] loadGraph(String name, int indexFrom) {
 void setup() {
   size(800, 600);
   smooth();
-  vertices = loadGraph("jagmesh1", 1);
+  //vertices = loadGraph("jagmesh1", 1);
+  vertices = loadGraph("stufe", 1);
 
   //for (int i = 0; i < vertices.length; i++) {
   //  vertices[i] = new Vertex(i * 50, i * 5); 
