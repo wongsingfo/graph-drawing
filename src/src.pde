@@ -96,6 +96,7 @@ void draw() {
       energy += i.energy();
       i.update();
     }
+    updateStep(energy);
   }
   
   stroke(0);
@@ -104,6 +105,8 @@ void draw() {
   
   textSize(32);
   text(String.format("Energy: %f, step: %f", energy0, step), 10, 30);
+  
+  //ellipse(pmouseX,pmouseY,12,12);
   
   scale(ratio);
   translate(translateX, translateY);
@@ -114,8 +117,6 @@ void draw() {
   for (Vertex i: vertices) {
     i.displayc();
   }
-  
-  updateStep(energy);
   
 } 
 
@@ -129,12 +130,20 @@ void toggleLoop() {
   running = ! running;
 }
 
-void mousePressed() {
-}
-
 void keyPressed() {
-  if (keyCode == 'P') {
-    toggleLoop();
+  switch (keyCode) {
+    case 'P':
+      toggleLoop();
+      break;
+    case 'S':
+      step = 8.0;
+      break;
+    case 'R':
+      if (lastLockedVertex != null) {
+        lastLockedVertex.locked = false;
+        step = max(step, 2.0);
+      }
+      break;
   }
 }
 
@@ -149,4 +158,52 @@ void mouseWheel(MouseEvent event) {
   translateX += mouseX * tt;
   translateY += mouseY * tt;
   ratio = ratio_;
+}
+
+Vertex lockedVertex = null, lastLockedVertex = null;
+
+Vertex nearestVertex(PVector ref) {
+  if (vertices.length == 0) return null;
+  Vertex result = vertices[0];
+  for (Vertex v : vertices) {
+    if (v.distance(ref) < result.distance(ref)) {
+      result = v;
+    }
+  }
+  if (result.distance(ref) < SelectRange) {
+    return null;
+  } else {
+    return result;
+  }
+}
+
+PVector offset;
+void mousePressed() {
+  PVector mouse = new PVector(mouseX, mouseY);
+  mouse.div(ratio);
+  mouse.sub(new PVector(translateX, translateY));
+  
+  lockedVertex = nearestVertex(mouse);
+  if(lockedVertex != null) {
+    lockedVertex.locked = true;
+    offset = PVector.sub(mouse, lockedVertex.location);
+  }
+}
+
+void mouseDragged() {
+  PVector mouse = new PVector(mouseX, mouseY);
+  mouse.div(ratio);
+  mouse.sub(new PVector(translateX, translateY));
+  
+  if(lockedVertex != null) {
+    step = max(step, 2.0);
+    lockedVertex.location = PVector.sub(mouse, offset);
+  }
+}
+
+void mouseReleased() {
+  if (lockedVertex != null) {
+    lastLockedVertex = lockedVertex;
+  }
+  lockedVertex = null;
 }

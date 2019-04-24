@@ -3,6 +3,7 @@ public class Vertex {
   private PVector location;
   private PVector accForce = new PVector();
   int id = rand.nextInt();
+  boolean locked = false;
   
   List<Vertex> neighbors = new ArrayList<Vertex>();
   
@@ -24,13 +25,15 @@ public class Vertex {
   }
   
   public void update() {
-    location.add(accForce.normalize().mult(step));
+    if (! locked) {
+      location.add(accForce.normalize().mult(step));
+    }
     //checkEdges();
     accForce.mult(0);
   }
   
   private void displayc() {
-    ellipse(location.x,location.y,24,24);
+    ellipse(location.x,location.y, VertexSize,VertexSize);
   }
   
   private void display() {
@@ -57,6 +60,10 @@ public class Vertex {
       location.y = 0;
     }
 
+  }
+  
+  public float distance(PVector a) {
+    return PVector.sub(location, a).mag();
   }
   
   public float distance(Vertex a) {
