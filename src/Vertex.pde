@@ -29,19 +29,18 @@ public class Vertex {
     accForce.mult(0);
   }
   
+  private void displayc() {
+    ellipse(location.x,location.y,24,24);
+  }
+  
   private void display() {
-    stroke(0);
-    strokeWeight(2);
-    fill(127);
-    if (neighbors.isEmpty()) {
-      ellipse(location.x,location.y,24,24);
-    } else {
-      for (Vertex a : neighbors) {
-        if (a.id > id) {
-          line(location.x, location.y, a.location.x, a.location.y);
-        }
+    
+    for (Vertex a : neighbors) {
+      if (a.id > id) {
+        line(location.x, location.y, a.location.x, a.location.y);
       }
     }
+    
   }
   
   public void checkEdges() {

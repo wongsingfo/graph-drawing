@@ -42,7 +42,7 @@ void setup() {
   size(800, 600);
   smooth();
   //vertices = loadGraph("jagmesh1", 1);
-  vertices = loadGraph("stufe", 1);
+  vertices = loadGraph("simple", 1);
 
   //for (int i = 0; i < vertices.length; i++) {
   //  vertices[i] = new Vertex(i * 50, i * 5); 
@@ -69,11 +69,6 @@ void updateStep(float energy) {
     progress = 0;
     step *= step_scale;
   }
-  
-  if (step < 0.0000003) {
-    toggleLoop();
-  }
-  
   energy0 = energy;
 }
 
@@ -86,28 +81,42 @@ void draw() {
   float energy = 0;
   
   background(200);
-  for (Vertex i: vertices) {
-    for (Vertex j: vertices) {
-      if (i != j) {
-        i.applyForce(j.repulse(i));
+  
+  if (step > 0.0000003) {
+    for (Vertex i: vertices) {
+      for (Vertex j: vertices) {
+        if (i != j) {
+          i.applyForce(j.repulse(i));
+        }
       }
+      for (Vertex j: i.neighbors) {
+        i.applyForce(j.attract(i));
+      }
+      
+      energy += i.energy();
+      i.update();
     }
-    for (Vertex j: i.neighbors) {
-      i.applyForce(j.attract(i));
-    }
-    
-    energy += i.energy();
-    i.update();
   }
+  
+  stroke(0);
+  strokeWeight(2);
+  fill(127);
+  
+  textSize(32);
+  text(String.format("Energy: %f, step: %f", energy0, step), 10, 30);
+  
+  scale(ratio);
+  translate(translateX, translateY);
   
   for (Vertex i: vertices) {
     i.display();
   }
+  for (Vertex i: vertices) {
+    i.displayc();
+  }
   
   updateStep(energy);
   
-  textSize(32);
-  text(String.format("Energy: %f, step: %f", energy0, step), 10, 30);
 } 
 
 boolean running = true;
@@ -121,5 +130,23 @@ void toggleLoop() {
 }
 
 void mousePressed() {
-  toggleLoop();
+}
+
+void keyPressed() {
+  if (keyCode == 'P') {
+    toggleLoop();
+  }
+}
+
+float ratio = 1.0;
+float translateX = 0.0, translateY = 0.0;
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  float delta = e * WheelSpeed;
+  float ratio_ = ratio + delta;
+  
+  float tt = -delta / ratio_ / ratio;
+  translateX += mouseX * tt;
+  translateY += mouseY * tt;
+  ratio = ratio_;
 }
