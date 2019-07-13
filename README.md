@@ -1,4 +1,4 @@
-Introduction
+# Introduction
 
 
 
@@ -23,11 +23,11 @@ drawback
 
 
 
-## models
+# models
 
 minimize the system energy
 
-###Force (spring-electrical models)
+## Force (spring-electrical models)
 
 - springs between neighboring (**only**  between neighboring vertices)
 - repulsive electrical forces (proportional to the inverse of the physical distance)
@@ -46,7 +46,7 @@ we fix $C=0.2​$.
 
 
 
-*peripheral effect*
+### peripheral effect
 
 <img src="assets/image-20190410205525695.png" style="zoom:50">
 
@@ -55,7 +55,7 @@ we fix $C=0.2​$.
 
 
 
-### spring model
+## spring model
 
 spring attached between any two pairs of vertices
 
@@ -103,9 +103,9 @@ adaptively set `max_tree _level`
 
 
 
-### Graph coarsening
+## Graph coarsening
 
-####EC: edge collapsing
+### EC: edge collapsing
 
 the weight of a vertex/edge is the sum of weights of vertices/edges it replaces
 
@@ -114,7 +114,7 @@ the weight of a vertex/edge is the sum of weights of vertices/edges it replaces
 
 coarsen the graph until $\frac{\left|V^{i+1}\right|}{\left|V^{i}\right|}>\rho(0.75)$ 
 
-####MIVS: maximal independent vertex set 
+### MIVS: maximal independent vertex set 
 
 result in a coarser graph with less than 50% vertices
 
@@ -136,7 +136,7 @@ cutoff radius for repulsive forces $R^{i}=r(i+1) K^{i}$
 
 $r=4$
 
-## reference
+# reference
 
 
 
